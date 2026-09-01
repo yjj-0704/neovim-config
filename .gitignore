@@ -1,0 +1,17 @@
+# 敏感信息：永不提交
+.env
+.env.*
+*.swp
+*.swo
+
+# 编辑器临时文件
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 不提交用户的 lazy-lock.json，让每个用户自己解析；
+# 如果你想锁定版本（推荐团队协作时），改为：!lazy-lock.json
+lazy-lock.json
