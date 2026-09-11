@@ -1,5 +1,5 @@
 -- ~/.config/nvim/lua/plugins/cmp.lua
--- nvim-cmp + Trae 风格暗色浮窗 + Tab 确认 + AI ghost 协作
+-- nvim-cmp 基本补全：LSP + buffer + path + snippet
 return {
   {
     "hrsh7th/nvim-cmp",
@@ -15,7 +15,6 @@ return {
     },
     config = function()
       local cmp = require("cmp")
-      local ai  = require("core.ai")
 
       cmp.setup({
         completion = { completeopt = "menu,menuone,noinsert,noselect" },
@@ -32,51 +31,24 @@ return {
           completion    = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),
         },
-        mapping = {
-          -- ★ Tab 确认补全；AI ghost 在场时同时接受 AI
-          ["<Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.confirm({ select = true })
-            elseif ai.has_ghost() then
-              ai.accept()
-            else
-              fallback()
-            end
-          end, { "i", "s" }),
-
-          -- ★ Shift+Tab：补全菜单里上一项；否则拒绝 AI ghost
-          ["<S-Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_prev_item()
-            elseif ai.has_ghost() then
-              ai.reject()
-            else
-              fallback()
-            end
-          end, { "i", "s" }),
-
-          ["<CR>"] = cmp.mapping.confirm({ select = false }),
-
+        mapping = cmp.mapping.preset.insert({
           ["<C-Space>"] = cmp.mapping.complete(),
-          ["<C-n>"]      = cmp.mapping.select_next_item({ select = false }),
-          ["<C-p>"]      = cmp.mapping.select_prev_item({ select = false }),
-          ["<C-d>"]      = cmp.mapping.scroll_docs(4),
-          ["<C-u>"]      = cmp.mapping.scroll_docs(-4),
-          ["<C-e>"]      = cmp.mapping.abort(),
-
-          -- 兜底：Esc 也能拒绝 AI ghost
-          ["<Esc>"] = cmp.mapping(function(fallback)
-            if ai.has_ghost() then
-              ai.reject()
-            else
-              fallback()
-            end
+          ["<C-n>"]     = cmp.mapping.select_next_item({ select = false }),
+          ["<C-p>"]     = cmp.mapping.select_prev_item({ select = false }),
+          ["<C-d>"]     = cmp.mapping.scroll_docs(4),
+          ["<C-u>"]     = cmp.mapping.scroll_docs(-4),
+          ["<C-e>"]     = cmp.mapping.abort(),
+          ["<CR>"]      = cmp.mapping.confirm({ select = false }),
+          ["<Tab>"]     = cmp.mapping(function(fallback)
+            if cmp.visible() then cmp.confirm({ select = true }) else fallback() end
           end, { "i", "s" }),
-        },
+          ["<S-Tab>"]   = cmp.mapping(function(fallback)
+            if cmp.visible() then cmp.select_prev_item() else fallback() end
+          end, { "i", "s" }),
+        }),
         experimental = { ghost_text = false },
       })
 
-      -- ===== Trae 风暗色浮窗 =====
       local function hi(g, o) o.default = true; vim.api.nvim_set_hl(0, g, o) end
       hi("Pmenu",        { fg = "#d4d4d4", bg = "#1e1e1e" })
       hi("PmenuSel",     { fg = "#ffffff", bg = "#094771", bold = true })

@@ -1,5 +1,5 @@
 -- ~/.config/nvim/lua/plugins/lsp.lua
--- Mason + lspconfig：java/clangd/pyright/gopls 一站式
+-- Mason + lspconfig：jdtls / clangd / pyright
 return {
   -- Mason 自身
   {
@@ -20,8 +20,6 @@ return {
           "jdtls",    -- Java
           "clangd",   -- C/C++
           "pyright",  -- Python
-          "gopls",    -- Go
-          "lua_ls",   -- Lua（顺手）
         },
         automatic_installation = true,
         automatic_enable = true,
@@ -99,28 +97,6 @@ return {
         },
       })
 
-      -- Go (gopls)
-      lspconfig.gopls.setup({
-        capabilities = capabilities,
-        on_attach = function(client, bufnr)
-          on_attach(client, bufnr)
-          -- 保存时 go fmt / goimports 由 gopls 自行处理（gofumpt 需另外配置）
-        end,
-        cmd = { "gopls" },
-        filetypes = { "go", "gomod", "gowork", "gotmpl" },
-        root_dir = function(fname)
-          local util = require("lspconfig.util")
-          return util.root_pattern("go.work", "go.mod", ".git")(fname)
-        end,
-        settings = {
-          gopls = {
-            gofumpt = true,
-            staticcheck = true,
-            analyses = { unusedparams = true, unusedwrite = true, nilness = true },
-            hints = { assignVariableTypes = true, compositeLiteralFields = true },
-          },
-        },
-      })
     end,
   },
 

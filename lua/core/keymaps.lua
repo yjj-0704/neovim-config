@@ -19,16 +19,10 @@ keymap.set("n", "<C-u>", "<C-u>zz", opts)
 keymap.set("n", "n", "nzzzv", opts)
 keymap.set("n", "N", "Nzzzv", opts)
 
--- Leader 快捷键提示
+-- Leader 快捷键
 keymap.set("n", "<leader>", "<cmd>Lazy<cr>", { desc = "Lazy" })
 keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", { desc = "File tree" })
 keymap.set("n", "<leader>w", "<cmd>w<cr>", opts)
-
--- AI provider 切换（normal 模式）
-keymap.set("n", "<leader>aa", function() require("core.ai").cycle() end, { desc = "Cycle AI provider" })
-keymap.set("n", "<leader>as", function() require("core.ai").status() end, { desc = "AI status" })
--- 插入模式下手动触发 AI（Tab 行为外的显式触发）
-keymap.set("i", "<C-x><C-a>", function() require("core.ai").insert() end, { desc = "AI complete (insert)" })
 
 -- LSP
 keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Goto definition" })
@@ -38,5 +32,4 @@ keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename" })
 keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
 keymap.set("n", "<leader>f", function() vim.lsp.buf.format({ async = true }) end, { desc = "Format" })
 
--- Tab 键：交给 nvim-cmp 接管（trae 风格）
--- 见 plugins/cmp.lua
+-- Tab 键交给 nvim-cmp 接管，见 plugins/cmp.lua
